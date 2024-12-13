@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dustin Espeleta - Interactive Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --background-color: #f0f4f8;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #home {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        #home-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        #home img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
+        }
+
+        #home img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Navigation */
+        #nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        #nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 15px 0;
+        }
+
+        #nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            margin: 0 15px;
+            position: relative;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        #nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        #nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Section Styles - Each section now has full screen height (100vh) */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        #skills, #projects, #sdg, #contact {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        #skills {
+            background: var(--background-color);
+        }
+
+        #projects {
+            background: #f9f9f9;
+        }
+
+        #sdg {
+            background: #f9f9f9;
+        }
+
+        #contact {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .skills-container, .project-grid, .sdg-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        /* Skills Section */
+        .skill-category {
+            background: var(--background-color);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 15px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-category li::before {
+            content: '•';
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        /* Projects Section */
+        .project-card {
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .project-details {
+            padding: 20px;
+        }
+
+        .project-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .project-links a {
+            margin: 0 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* SDG Section */
+        .sdg-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .sdg-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .sdg-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .sdg-item h3 {
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+
+        /* Social Links */
+        .social-links a {
+            color: white;
+            margin: 0 15px;
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2) rotate(360deg);
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .skills-container, .project-grid, .sdg-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#sdg">SDG Goals</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <div id="home-content">
+            <img src="profile.jpg" alt="Dustin Espeleta">
+            <h1>Dustin Espeleta</h1>
+            <p>Hi, I'm Dustin! I was born on September 14, 2005, and I currently reside in Sampaga, Batangas City. I'm a first-year student pursuing a degree in Information Technology at Batangas State University - The National Engineering University. When I'm not immersed in my studies, I enjoy playing mobile games as a way to unwind and relax.
+<p> I am also committed to supporting SDG 3: Good Health and Well-Being. Ensuring access to quality healthcare and promoting well-being is essential for fostering a healthier society where individuals can thrive and reach their full potential.</p>
+
+		<p>Welcome to my portfolio!</p>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Skills and Expertise</h2>
+        <div class="skills-container">
+            <div class="skill-category">
+                <h3>Technical Skills</h3>
+                <ul>
+                    <li>Computer Hardware and Software</li>
+                    <li>Troubleshooting and Repair</li>
+ 		    <li>Microsoft Office</li>
+	            <li>NCII Certified in Computer Systems Servicing</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3>Soft Skills</h3>
+                <ul>
+                    <li>Teamwork and Collaboration</li>
+                    <li>Adaptability</li>
+                    <li>Optimism</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-details">
+                    <h3>Mobile Health Monitoring Application</h3>
+                    <p>A mobile app designed to monitor chronic health conditions such as hypertension, diabetes, and asthma. The app collects real-time health data from wearable devices (e.g., heart rate, blood sugar levels, oxygen saturation), sends alerts for abnormal readings, and provides tips for maintaining a healthy lifestyle. It also syncs data with healthcare providers for better management and follow-up.</p>
+                    <div class="project-links">
+                        <a href="#" target="_blank">View Project</a>
+                        <a href="#" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-details">
+                    <h3>AI-based Early Disease Detection System</h3>
+                    <p>This project focuses on the development of an AI-driven platform that helps in the early detection of diseases such as cancer, diabetes, and heart disease. By analyzing medical data, such as patient history, symptoms, and diagnostic images, the system provides predictive insights, potentially detecting diseases at an earlier stage, improving treatment outcomes, and reducing healthcare costs.</p>
+                    <div class="project-links">
+                        <a href="#" target="_blank">View Project</a>
+                        <a href="#" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sdg">
+    		 <h2>Sustainable Development Goals (SDGs)</h2>
+        			 
+        
+        <div class="sdg-grid">
+            <div class="sdg-item">
+                <img src="sdg3-icon.jpg" alt="No Poverty">
+                <h3>"Good Health and Well-being"<h3>
+ 		<p>Aims to ensure healthy lives and promote well-being for all, at all ages.</p>
+            </div>
+            <div class="sdg-item">
+                <h3>Importance</h3>
+                <p>SDG 3, "Good Health and Well-being," is crucial because it aims to ensure healthy lives and promote well-being for all at all ages. Health is foundational to human development, economic growth, and social stability. Achieving this goal addresses key issues like reducing maternal and child mortality, combating diseases like HIV/AIDS and malaria, ensuring access to essential healthcare, and promoting mental health. A healthy population is more productive, leading to stronger communities and sustainable development, making SDG 3 essential for the overall progress of the 2030 Agenda.</p>
+            </div>
+	<div class="sdg-card=">
+            <div class="sdg-item">
+                <h3>"How does it relate to my skills, projects,and aspirations?"<h3>
+ 		<p> As an IT student, SDG 3, "Good Health and Well-being," is important because technology can transform healthcare by improving access, efficiency, and data management. My skills in software development, data analysis, and cybersecurity can be applied to projects like telemedicine platforms, health apps, and electronic health records. These projects can help bridge healthcare gaps, especially in underserved areas. By pursuing careers in health tech, data science, or medical IT, you can directly contribute to SDG 3 by creating solutions that improve global health outcomes.</p>
+        </div>
+    </section>
+
+   <section id="contact">
+    <h2>Contact</h2>
+    <p>If you'd like to get in touch, please reach out to me via the following platforms:</p>
+    <div class="social-links">
+        <!-- Facebook Link -->
+        <a href="https://www.facebook.com/dustin.espeleta.2024/" target="_blank">
+            <i class="fab fa-facebook"></i>
+        </a>
+
+        <!-- Instagram Link -->
+        <a href="https://www.instagram.com/dazzzten/" target="_blank">
+            <i class="fab fa-instagram"></i>
+        </a>
+
+        <!-- Gmail Link -->
+        <a href="mailto:dustinespeleta14@gmail.com" target="_blank">
+            <i class="fas fa-envelope"></i>
+        </div>
+    </section>
+</body>
+</html>
